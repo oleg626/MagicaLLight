@@ -37,3 +37,6 @@ FORMS += \
 
 DISTFILES += \
     style.css
+
+RESOURCES += \
+    resources.qrc
