@@ -1,0 +1,4 @@
+rgb(102, 55, 232) - majorelle blue
+rgb(157, 167, 242) - maximum blue purple
+rgb(62, 25, 41) - dark purple
+rgb(149, 127, 239)- medium purple
