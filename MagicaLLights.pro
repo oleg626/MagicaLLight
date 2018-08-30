@@ -1,13 +1,13 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2018-08-29T18:59:14
+# Project created by QtCreator 2018-08-29T19:59:04
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+CONFIG -= console
 TARGET = MagicaLLights
 TEMPLATE = app
 
@@ -25,10 +25,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    server.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    server.h
 
 FORMS += \
         mainwindow.ui
+
+DISTFILES += \
+    style.css
