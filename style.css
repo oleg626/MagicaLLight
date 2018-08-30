@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #MainWindow {
     background: rgb(102, 55, 232);
 }
@@ -25,3 +26,32 @@ QPushButton#num:pressed {
     image: url(C:/Users/oleg6/Documents/MagicaLLights/images/b2.png);
 }
 
+=======
+#MainWindow {
+    background: rgb(102, 55, 232);
+}
+
+#centralWidget {
+    border: 10px;
+    border-color:rgb(62, 25, 41);
+    border-radius: 40px;
+    background: rgb(157, 167, 242);
+}
+
+QPushButton#push_button { background-color: red; }
+QPushButton#push_button:hover { background-color: white; }
+QPushButton#num {
+    image: url(C:/Users/oleg6/Documents/MagicaLLights/images/b1.png);
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    height: 100px;
+    width: 100px;
+}
+QPushButton#num:hover {
+    image: url(C:/Users/oleg6/Documents/MagicaLLights/images/b3.png);
+}
+QPushButton#num:pressed {
+    image: url(C:/Users/oleg6/Documents/MagicaLLights/images/b2.png);
+}
+
+>>>>>>> 563b9ef6e74732dbe513e6f8379036a801268e84
