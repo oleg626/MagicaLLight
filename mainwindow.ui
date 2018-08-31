@@ -92,7 +92,7 @@ QCheckBox
 
 QLineEdit
 {
-	font: 75 22pt &quot;Consolas&quot;;
+	font: 75 10pt &quot;Consolas&quot;;
 	color:rgb(76, 52, 152);
 	background-color:rgb(240, 250, 245)
 }
@@ -290,7 +290,7 @@ QPushButton#num:pressed {
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QLineEdit" name="lineEdit">
+       <widget class="QLineEdit" name="file_name_lineEdit">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -308,6 +308,15 @@ QPushButton#num:pressed {
           <width>16777215</width>
           <height>30</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Consolas</family>
+          <pointsize>10</pointsize>
+          <weight>9</weight>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
         </property>
        </widget>
       </item>
@@ -360,6 +369,9 @@ QPushButton#num:pressed {
       </property>
       <property name="text">
        <string>Start</string>
+      </property>
+      <property name="checkable">
+       <bool>false</bool>
       </property>
      </widget>
     </item>

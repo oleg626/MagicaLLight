@@ -19,7 +19,11 @@ public:
 private slots:
     void on_start_button_clicked();
 
+    void lights_connected();
+
     void on_stop_button_clicked();
+
+    void on_browse_button_clicked();
 
 private:
     Ui::MainWindow *ui;

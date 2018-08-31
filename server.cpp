@@ -5,14 +5,15 @@
 #include <mem.h>
 #include <QString>
 #include <Qtime>
-
+#include <mainwindow.h>
 
 #define K 4
 
 myserver::myserver()
 {
     player = new QMediaPlayer(this);
-    myserver::putii = new QString("C:/Users/oleg6/Videos/Any Audio Converter/WAVE/aida.wav");
+
+    //myserver::putii = new QString("C:/Users/oleg6/Videos/Any Audio Converter/WAVE/puff.wav");
 }
 
 myserver::~myserver(){}
@@ -46,13 +47,13 @@ void myserver::sendData(char * Data)
         qDebug()<<"sent";
     }
 }
-void myserver::prepareSong(QString filename)
+int myserver::prepareSong(QString filename)
 {
-    QFile file(*myserver::putii);
+    QFile file(filename);
     if (!file.open(QIODevice::ReadOnly)) {
-        return;
+        return 0;
     }
-    // пропуск чтения хидера, считаем что это 44100КГц, 16 бит, 2 канала
+    // пропуск чтения хидера, считаем что это 44100Гц, 16 бит, 2 канала
 
     // ищем data
     quint32 chunkDataSize = 0;
@@ -76,7 +77,7 @@ void myserver::prepareSong(QString filename)
                 if (bytesToRead != read)
                 {
                     qDebug() << "something awful happens";
-                    return;
+                    return -1;
                 }
             }
             chunkDataSize = qFromLittleEndian<quint32>((const uchar*)buff);
@@ -90,7 +91,7 @@ void myserver::prepareSong(QString filename)
     if (!chunkDataSize)
     {
         qDebug() << "chunk data not found";
-        return;
+        return -2;
     }
     qDebug() << "length of chunks =" << chunkDataSize;
     int samples = 0;
@@ -98,23 +99,19 @@ void myserver::prepareSong(QString filename)
     while (file.read(buff, 0x04) > 0)
     {
         chunkDataSize -= 4;
-        //qint16 ch1 = qFromLittleEndian<qint16>((const uchar*)buff);
-       //qint16 ch2 = qFromLittleEndian<qint16>((const uchar*)buff);
-
-        if(counter%4800==0)
+        if(counter%4808==0)
         {
             myserver::channel1[samples] = myserver::filter(abs(qFromLittleEndian<qint16>((const uchar*)buff))/4);
-            //qDebug()<<myserver::channel1[samples]<<endl;
             if(myserver::channel1[samples] > myserver::maximum)
             {
                 myserver::maximum = myserver::channel1[samples];
             }
-            //myserver::channel2[samples] = qFromLittleEndian<qint16>((const uchar*)buff);
             samples++;
         }
         counter++;
         // проверка на окончание
-        if (chunkDataSize == 0 || chunkDataSize & 0x80000000) {
+        if (chunkDataSize == 0 || chunkDataSize & 0x80000000)
+        {
             break;
         }
     }
@@ -129,7 +126,6 @@ void myserver::prepareSong(QString filename)
     qint16 min = 0;
     for(int i = 0;i<myserver::samples_amount; i++)
     {
-        //qDebug()<<myserver::channel1[i]<<" ";
         max--;
         min++;
         if(myserver::channel1[i] > max)
@@ -147,9 +143,7 @@ void myserver::prepareSong(QString filename)
             if((max-min)!=0)
             {
                 float temp = (float)(myserver::channel1[i]-min)/(max-min);
-                //qDebug()<<"temp "<<temp;
                 myserver::channel1[i] = (qint16)(temp*1023);
-                //qDebug()<<myserver::channel1[i];
             }
             else
             {
@@ -170,7 +164,9 @@ void myserver::prepareSong(QString filename)
         char const *pchar = s.c_str();
         myserver::channel1_char[i] = pchar;
     }
+    return 1;
 }
+
 void myserver::incomingConnection(int socketDescriptor)
 {
     socket = new QTcpSocket(this);
@@ -179,20 +175,18 @@ void myserver::incomingConnection(int socketDescriptor)
     connect(socket,SIGNAL(readyRead()),this,SLOT(sockReady()));
     connect(socket,SIGNAL(disconnected()),this,SLOT(sockDisc()));
 
-    QUrl adresok = (QFileInfo(*myserver::putii).absoluteFilePath());
-    player->setMedia(adresok);
-    qDebug()<<player->errorString();
     qDebug()<<socketDescriptor<<" Client connected";
+    myserver::there_is_client = true;
 }
 
 
 void myserver::sockReady()
 {
-    static bool start = true;
-    if(start)
+
+    if(myserver::first_time)
     {
         player->play();
-        start = false;
+        myserver::first_time = false;
     }
     std::string s = std::to_string(myserver::channel1[myserver::times_called]);
     char const *pchar = s.c_str();
@@ -200,8 +194,6 @@ void myserver::sockReady()
     myserver::times_called++;
     if(myserver::times_called == myserver::samples_amount)
     {
-        //player->play();
-        //timer->stop();
         qDebug()<<"Finished";
         socket->write("finished");
         myserver::times_called=0;

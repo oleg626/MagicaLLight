@@ -18,17 +18,17 @@ public:
     qint16 channel1[10000];
     const char* channel1_char[10000];
     qint32 samples_amount=0;
-    bool ready = false;
+    bool there_is_client = false;
     int times_called = 0;
     int maximum = 0;
+    bool first_time = true;
     const QString *putii;
     qint64 maxlength = 1024;
     QMediaPlayer* player;
-    QTimer *timer;
 
 public slots:
     void sendData(char *);
-    void prepareSong(QString filename);
+    int prepareSong(QString filename);
     void startServer();
     void incomingConnection(int socketDescriptor);
     void sockReady();
