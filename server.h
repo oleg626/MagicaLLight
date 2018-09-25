@@ -1,6 +1,6 @@
 #ifndef MYSERVER_H
 #define MYSERVER_H
-
+//
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QMediaPlayer>
