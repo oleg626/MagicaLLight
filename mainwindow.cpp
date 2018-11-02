@@ -11,16 +11,35 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Magical Light");
     MainWindow::Server.startServer();
     connect(&(MainWindow::Server),
             SIGNAL(newConnection()),
             this,
             SLOT(lights_connected()));
+//    connect((MainWindow::Server.socket),
+//            SIGNAL(disconnected()),
+//            this,
+//            SLOT(lights_disconnected));
+    this->createUI(QStringList() <<trUtf8("address")
+                                 <<trUtf8("Name"));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::createUI(const QStringList &headers)
+{
+    ui->PlayList->setColumnCount(2);
+    ui->PlayList->setShowGrid(true);
+    ui->PlayList->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->PlayList->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->PlayList->setHorizontalHeaderLabels(headers);
+    ui->PlayList->horizontalHeader()->setStretchLastSection(true);
+    ui->PlayList->hideColumn(0);
+
 }
 void MainWindow::lights_connected()
 {
@@ -29,6 +48,14 @@ void MainWindow::lights_connected()
     ui->lightConnected_checkBox->setChecked(true);
     //ui->lightConnected_checkBox->setCheckable(false);
 }
+
+//void MainWindow::lights_disconnected()
+//{
+//    ui->lightConnected_checkBox->setCheckable(true);
+//    qDebug()<<"Lights disconnected";
+//    ui->lightConnected_checkBox->setChecked(false);
+//    //ui->lightConnected_checkBox->setCheckable(false);
+//}
 
 void MainWindow::on_start_button_clicked()
 {
@@ -53,19 +80,17 @@ void MainWindow::on_start_button_clicked()
             QMessageBox::information(this,"Follow steps","Choose the mode");
         }
         ui->centralWidget->setStyleSheet(
-        "#centralWidget {background-image: url(:/background-image/images/bg/on_ready.png);}");
+        "#centralWidget {background-image: url(:/background_images/images/bg/on_reeady.png);}");
     }
     else
     {
         QMessageBox::warning(this,"Error","Light's not connected");
     }
-
-
 }
 
 void MainWindow::on_stop_button_clicked()
 {
-    ui->centralWidget->setStyleSheet("#centralWidget {background-image: url(:/background-image/images/bg/off_ready.png);}");
+    ui->centralWidget->setStyleSheet("#centralWidget{background-image: url(:/background_images/images/bg/off_ready.png);}");
     MainWindow::Server.socket->write("stop");
     MainWindow::Server.player->stop();
     MainWindow::Server.times_called = 0;
@@ -77,9 +102,8 @@ void MainWindow::on_browse_button_clicked()
     QString filename = QFileDialog::getOpenFileName(
                 this,
                 tr("Open File"),
-                "C:/Users/oleg6/Videos/Any Audio Converter/WAVE/",
+                "C:/Users/Oleg/Videos/Any Audio Converter/WAVE",
                 "All files (*.*);; Wav files (*.wav)"
-
                 );
     ui->file_name_lineEdit->setText(filename);
     MainWindow::Server.putii = &filename;
@@ -90,9 +114,22 @@ void MainWindow::on_browse_button_clicked()
     qDebug()<<MainWindow::Server.player->errorString();
 }
 
+void MainWindow::on_AddSong_clicked()
+{
+    QString filename = QFileDialog::getOpenFileName(
+                this,
+                tr("Open File"),
+                "C:/Users/Oleg/Videos/Any Audio Converter/WAVE",
+                "All files (*.*);; Wav files (*.wav)"
+                );
+    ui->PlayList->insertRow(0);
+    ui->PlayList->setItem(0,0,new QTableWidgetItem(filename));
+    filename.remove(0,46);
+    ui->PlayList->setItem(0,1,new QTableWidgetItem(filename));
+}
 
-
-
-
-
-
+void MainWindow::on_DeleteSong_clicked()
+{
+    ui->PlayList->selectedItems().removeFirst();
+    ui->PlayList->clear();
+}

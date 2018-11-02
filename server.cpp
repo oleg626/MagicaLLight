@@ -4,7 +4,7 @@
 #include <QtEndian>
 #include <mem.h>
 #include <QString>
-#include <Qtime>
+//#include <Qtime>
 #include <mainwindow.h>
 
 #define K 4
@@ -99,7 +99,7 @@ int myserver::prepareSong(QString filename)
     while (file.read(buff, 0x04) > 0)
     {
         chunkDataSize -= 4;
-        if(counter%4808==0)
+        if(counter % 4800 == 0)
         {
             myserver::channel1[samples] = myserver::filter(abs(qFromLittleEndian<qint16>((const uchar*)buff))/4);
             if(myserver::channel1[samples] > myserver::maximum)
@@ -117,21 +117,21 @@ int myserver::prepareSong(QString filename)
     }
     myserver::samples_amount = samples;
     myserver::times_called = 0;
-    float divider = (float) myserver::maximum/1023;
-    for(int i = 0; i<myserver::samples_amount;i++)
+    float divider = (float) myserver::maximum / 1023;
+    for(int i = 0; i < myserver::samples_amount;i++)
     {
         myserver::channel1[i]/=divider;
     }
     qint16 max = 1023;
     qint16 min = 0;
-    for(int i = 0;i<myserver::samples_amount; i++)
+    for(int i = 0; i < myserver::samples_amount; i++)
     {
-        max--;
-        min++;
+        max -= 2;
+        min += 2;
         if(myserver::channel1[i] > max)
         {
             max = myserver::channel1[i];
-            myserver::channel1[i]=1023;
+            myserver::channel1[i] = 1023;
         }
         else if(myserver::channel1[i]<min)
         {
@@ -182,7 +182,6 @@ void myserver::incomingConnection(int socketDescriptor)
 
 void myserver::sockReady()
 {
-
     if(myserver::first_time)
     {
         player->play();
@@ -196,7 +195,7 @@ void myserver::sockReady()
     {
         qDebug()<<"Finished";
         socket->write("finished");
-        myserver::times_called=0;
+        myserver::times_called = 0;
     }
 }
 

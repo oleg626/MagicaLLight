@@ -35,8 +35,5 @@ HEADERS += \
 FORMS += \
         mainwindow.ui
 
-DISTFILES += \
-    style.css
-
 RESOURCES += \
     resources.qrc
