@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/background_images">
+        <file>images/bg/off_ready.png</file>
+        <file>images/bg/on_reeady.png</file>
+    </qresource>
+</RCC>
