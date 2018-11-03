@@ -1,8 +1,8 @@
 --WiFi Settup
 wifi.setmode(wifi.STATION)
 local cfg={}
-cfg.ssid="lnajdngjdnlgjdsng"
-cfg.pwd="schauma551"
+cfg.ssid="Olegs2"
+cfg.pwd="1312847569"
 wifi.sta.config(cfg)
 collectgarbage()
 print("wi-fi ready")
