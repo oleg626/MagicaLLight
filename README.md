@@ -24,3 +24,5 @@ Project execution plan:
 7. making PCB;
 8. making 3D case;
 9. installation.
+
+You can check out short demo [here](https://www.youtube.com/watch?v=hM5m-m5Mo0Q).
