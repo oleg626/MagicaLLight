@@ -5,7 +5,7 @@ _G["init"] = true
 dofile("wifi.lua")
 
 --dofile("wifi.lua")
-tmr.alarm(0,5000,tmr.ALARM_SINGLE,function()  
+tmr.alarm(0,10000,tmr.ALARM_SINGLE,function()  
                                         dofile("command_center.lua") 
                                         end)
 --dofile("command_center.lua")

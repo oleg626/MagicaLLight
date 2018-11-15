@@ -3,7 +3,7 @@ stop = false
                     
 if( _G["init"] == true) then
     sk = net.createConnection(net.TCP,0)
-    sk:connect(5555,"31.134.130.20")
+    sk:connect(1080,"192.168.1.10")
     print("connection")
     _G["init"] = false;
 end
